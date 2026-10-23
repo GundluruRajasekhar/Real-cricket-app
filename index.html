@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cricket Event OS – Legends &amp; Stars T20</title>
+<style>
+:root{--turf:#1f4d3a;--deep:#143528;--chalk:#f2f5f3;--paper:#fff;--ball:#b3202a;--brass:#c9a24b;--ink:#16231e;--muted:#5b6b63;--line:#d3dcd6;--good:#1f6b44;--warn:#9a6b00;--bad:#b3202a;
+--display:"Barlow Condensed","Arial Narrow",Impact,sans-serif;--body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--chalk);color:var(--ink);font:16px/1.5 var(--body)}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.05}
+h2{font-size:2rem;color:var(--deep)}h3{font-size:1.35rem;color:var(--deep);margin-bottom:8px}
+:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+header{background:var(--turf);color:#fff;padding:18px 20px}
+header .in{max-width:1180px;margin:auto;display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justify-content:space-between}
+header h1{font-size:2rem}
+.kpis{display:flex;gap:22px;flex-wrap:wrap}
+.kpi b{display:block;font-family:var(--display);font-size:1.7rem;line-height:1}
+.kpi span{font-size:.82rem;color:#cfe0d6}
+nav{background:var(--deep);position:sticky;top:0;z-index:5}
+nav .in{max-width:1180px;margin:auto;display:flex;overflow-x:auto}
+nav button{background:none;border:0;color:#d9e6de;padding:13px 16px;font:600 .95rem var(--body);cursor:pointer;border-bottom:4px solid transparent;white-space:nowrap}
+nav button[aria-selected=true]{color:#fff;border-bottom-color:var(--brass)}
+main{max-width:1180px;margin:auto;padding:24px 20px 60px}
+.tab{display:none}.tab.on{display:block}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:1.4fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g2e{grid-template-columns:1fr 1fr}
+@media(max-width:900px){.g2,.g3,.g2e{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:18px}
+label{display:block;font-weight:600;margin-top:10px;font-size:.92rem}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--line);border-radius:4px;font:inherit;background:#fff}
+button.b{background:var(--turf);color:#fff;border:0;border-radius:4px;padding:10px 16px;font:600 .95rem var(--body);cursor:pointer;margin-top:12px}
+button.b:hover{background:var(--deep)}button.b.red{background:var(--ball)}button.b.alt{background:#fff;color:var(--turf);border:2px solid var(--turf)}
+button.b:disabled{opacity:.45;cursor:not-allowed}
+.muted{color:var(--muted);font-size:.9rem}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#e6eee9}td.n,th.n{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+.pill{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.8rem;font-weight:600;background:#e6eee9}
+.pill.good{background:#d8eee1;color:var(--good)}.pill.warn{background:#fbefc9;color:var(--warn)}.pill.bad{background:#f7d9db;color:var(--bad)}
+/* stadium */
+.ring{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin:10px 0}
+.blk{border:2px solid var(--line);border-radius:6px;padding:8px 4px;text-align:center;cursor:pointer;background:#fff;font:inherit}
+.blk b{font-family:var(--display);font-size:1.3rem;display:block}.blk small{display:block;color:var(--muted)}
+.blk[aria-pressed=true]{border-color:var(--ball)}
+.heat{height:6px;border-radius:3px;margin-top:4px;background:#e1e9e4;overflow:hidden}.heat i{display:block;height:100%}
+.seats{display:grid;grid-template-columns:repeat(20,1fr);gap:3px;margin-top:10px}
+.seat{aspect-ratio:1;border-radius:3px;border:0;padding:0;background:#9bc4ae;cursor:pointer;min-width:0}
+.seat.t{background:#c8cfcb;cursor:not-allowed}.seat.s{background:var(--ball)}
+.seat:focus-visible{outline:3px solid var(--brass)}
+.legend{display:flex;gap:16px;font-size:.85rem;margin-top:8px}.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.pass{border:2px dashed var(--turf);border-radius:8px;padding:14px;display:grid;grid-template-columns:1fr auto;gap:12px;background:#f7faf8;margin-top:14px}
+.bar{display:grid;grid-template-columns:130px 1fr 80px;gap:10px;align-items:center;margin:7px 0;font-size:.9rem}
+.track{background:#e1e9e4;height:16px;border-radius:3px;overflow:hidden}.fill{height:100%;background:var(--turf)}
+.log{max-height:240px;overflow:auto;font-size:.88rem;border:1px solid var(--line);border-radius:4px;background:#fafcfb}
+.log div{padding:6px 10px;border-bottom:1px solid var(--line)}
+.chat{height:300px;overflow:auto;border:1px solid var(--line);border-radius:4px;padding:10px;background:#fafcfb}
+.msg{margin:6px 0;padding:8px 12px;border-radius:8px;max-width:85%}.msg.u{background:#dcebe2;margin-left:auto}.msg.a{background:#fff;border:1px solid var(--line)}
+.agent{border-left:5px solid var(--turf)}
+.rec{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:.92rem}
+.rec button{margin:0;padding:5px 10px;font-size:.82rem}
+.sr{position:absolute;left:-9999px}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <h1>Cricket Event OS &middot; Legends &amp; Stars T20</h1>
+  <div class="kpis" aria-live="polite">
+    <div class="kpi"><b id="kSold">0</b><span>seats sold</span></div>
+    <div class="kpi"><b id="kOcc">0%</b><span>occupancy</span></div>
+    <div class="kpi"><b id="kRev">0</b><span>ticket revenue (₹ crore)</span></div>
+    <div class="kpi"><b id="kIn">0</b><span>fans inside</span></div>
+  </div>
+</div></header>
+
+<nav aria-label="Platform sections"><div class="in" role="tablist" id="tabs"></div></nav>
+
+<main>
+<!-- BOOK -->
+<section class="tab" id="t-book" role="tabpanel">
+  <div class="grid g2">
+    <div class="card">
+      <h2>Stadium seat map</h2>
+      <p class="muted">Choose a block, then pick up to 10 seats. Demo data: sales are simulated and the section view shows 200 seats of the block.</p>
+      <div class="ring" id="ring"></div>
+      <h3 id="secTitle"></h3>
+      <div class="seats" id="seats" role="group" aria-label="Seats"></div>
+      <div class="legend"><span><i style="background:#9bc4ae"></i>Free</span><span><i style="background:var(--ball)"></i>Yours</span><span><i style="background:#c8cfcb"></i>Taken</span></div>
+    </div>
+    <div class="card">
+      <h2>Checkout</h2>
+      <p id="sel" class="muted">No seats selected.</p>
+      <p style="font:800 2.2rem var(--display);margin:6px 0" id="amt">₹0</p>
+      <label for="nm">Name on ticket</label><input id="nm" autocomplete="name">
+      <label for="em">Email</label><input id="em" type="email" autocomplete="email">
+      <label for="pay">Payment (test mode, no real charge)</label>
+      <select id="pay"><option>UPI (test)</option><option>Card (test)</option><option>Net banking (test)</option></select>
+      <button class="b red" id="payBtn" disabled>Pay and get tickets</button>
+      <p class="muted" id="payMsg" role="status"></p>
+      <div id="passes"></div>
+    </div>
+  </div>
+</section>
+
+<!-- GATE -->
+<section class="tab" id="t-gate" role="tabpanel">
+  <div class="grid g2e">
+    <div class="card">
+      <h2>Gate scanner</h2>
+      <p class="muted">Scan a ticket token. Each ticket works once; forged or reused tokens are refused. Gate follows ticket category.</p>
+      <label for="tok">Ticket token</label><input id="tok" placeholder="Paste or pick a token">
+      <label for="tokPick">Or pick a booked ticket</label><select id="tokPick"><option value="">No tickets booked yet</option></select>
+      <button class="b" id="scanBtn">Scan ticket</button>
+      <div id="scanRes" role="status" style="margin-top:14px;font-weight:600"></div>
+    </div>
+    <div class="card"><h3>Entry log</h3><div class="log" id="entryLog"><div class="muted">No scans yet.</div></div></div>
+  </div>
+</section>
+
+<!-- OPS -->
+<section class="tab" id="t-ops" role="tabpanel">
+  <div class="grid g2e">
+    <div class="card"><h2>Sales analytics</h2><div id="salesBars"></div><p class="muted" id="forecast"></p></div>
+    <div class="card"><h2>Revenue vs plan</h2><div id="revBars"></div><p class="muted">Plan: tickets 20.85, sponsorship 35.00, broadcast 50.00 (₹ crore). Sponsor and broadcast figures are signed deals only.</p></div>
+  </div>
+</section>
+
+<!-- SPONSORS -->
+<section class="tab" id="t-spon" role="tabpanel">
+  <div class="card">
+    <h2>Sponsor and broadcast pipeline</h2>
+    <p class="muted">Weighted value uses stage odds: Lead 10%, Pitched 30%, Negotiating 60%, Signed 100%.</p>
+    <div class="scroll"><table id="sponTable"></table></div>
+    <p id="sponSum" style="margin-top:12px;font-weight:600"></p>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="tab" id="t-sec" role="tabpanel">
+  <div class="grid g2e">
+    <div class="card">
+      <h2>Gate crowd sensors</h2>
+      <p class="muted">Simulated queue lengths. A real build reads CCTV counts and turnstile data.</p>
+      <div id="gateBars"></div>
+      <button class="b alt" id="simBtn">Simulate entry wave</button>
+    </div>
+    <div class="card">
+      <h2>Incident log</h2>
+      <label for="iz">Zone</label><select id="iz"></select>
+      <label for="it">What happened</label><input id="it">
+      <label for="isv">Severity</label><select id="isv"><option>low</option><option>medium</option><option>high</option></select>
+      <button class="b" id="incBtn">Log incident</button>
+      <div class="log" id="incLog" style="margin-top:12px"></div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENTS -->
+<section class="tab" id="t-agents" role="tabpanel">
+  <div class="card" style="margin-bottom:20px">
+    <h2>Event operations agents</h2>
+    <p class="muted">Each agent reads live platform data and proposes actions. Nothing happens until a person approves it.</p>
+    <button class="b" id="runAll">Run all agents</button>
+  </div>
+  <div class="grid g3" id="agentGrid"></div>
+  <div class="card" style="margin-top:20px"><h3>Approved actions</h3><div class="log" id="actLog"><div class="muted">None yet.</div></div></div>
+</section>
+
+<!-- ASSISTANT -->
+<section class="tab" id="t-ai" role="tabpanel">
+  <div class="card" style="max-width:720px">
+    <h2>Ticket assistant</h2>
+    <p class="muted">Ask about prices, seats, gates, schedule, parking, refunds, or a booking ID. This demo answers from platform data with fixed rules and does not call an AI model.</p>
+    <div class="chat" id="chat" aria-live="polite"></div>
+    <label for="q">Your question</label><input id="q" placeholder="e.g. How much is a VIP ticket?">
+    <button class="b" id="ask">Ask</button>
+  </div>
+</section>
+</main>
+
+<script>
+const $=id=>document.getElementById(id), fmt=n=>n.toLocaleString("en-IN"), cr=n=>n.toFixed(2);
+const SECRET="demo-secret-change-on-server";
+const tiers={gen:{n:"General Stand",p:800,gates:[1,2,3,4]},pre:{n:"Premium Stand",p:3000,gates:[5,6]},vip:{n:"VIP",p:15000,gates:[7]},box:{n:"Corporate Box",p:50000,gates:[8]}};
+const blocks=[];
+for(let i=1;i<=6;i++)blocks.push({id:"G"+i,t:"gen",cap:5000});
+for(let i=1;i<=4;i++)blocks.push({id:"P"+i,t:"pre",cap:3500});
+for(let i=1;i<=2;i++)blocks.push({id:"V"+i,t:"vip",cap:2250});
+blocks.push({id:"C1",t:"box",cap:1500});
+// demo launch-week sales per block (simulated)
+const demo={G1:3100,G2:2600,G3:2900,G4:1800,G5:2200,G6:1500,P1:2700,P2:2300,P3:1400,P4:900,V1:1800,V2:1200,C1:600};
+blocks.forEach(b=>{b.sold=demo[b.id];b.mine=new Set()});
+const bookings=[];const entered=new Set();const gateIn={1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0};
+let queues={1:40,2:55,3:35,4:60,5:30,6:25,7:10,8:8};
+const incidents=[];const actions=[];
+let cur=blocks[0],picked=new Set();
+
+/* utilities */
+function hash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
+const sign=id=>id+"."+hash(id+SECRET);
+function seeded(seed){let s=0;for(const c of seed)s=(s*31+c.charCodeAt(0))>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}}
+function qr(token){const r=seeded(token);let o='<rect width="21" height="21" fill="#fff"/>';
+ for(let y=0;y<21;y++)for(let x=0;x<21;x++){if(((x<8&&y<8)||(x>12&&y<8)||(x<8&&y>12)))continue;if(r()>.5)o+=`<rect x="${x}" y="${y}" width="1" height="1" fill="#16231e"/>`}
+ const f=(x,y)=>`<rect x="${x}" y="${y}" width="7" height="7" fill="#16231e"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#16231e"/>`;
+ return `<svg width="90" height="90" viewBox="0 0 21 21" shape-rendering="crispEdges" role="img" aria-label="Sample QR pattern">${o}${f(0,0)}${f(14,0)}${f(0,14)}</svg>`}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function stats(){const sold=blocks.reduce((s,b)=>s+b.sold,0);const rev=blocks.reduce((s,b)=>s+b.sold*tiers[b.t].p,0)/1e7;return{sold,rev,occ:sold/50000*100}}
+function tierStats(t){const bs=blocks.filter(b=>b.t===t);const cap=bs.reduce((s,b)=>s+b.cap,0),sold=bs.reduce((s,b)=>s+b.sold,0);return{cap,sold,occ:sold/cap*100,rev:sold*tiers[t].p/1e7}}
+function bar(label,pct,val,col){return `<div class="bar"><span>${label}</span><div class="track"><div class="fill" style="width:${Math.min(100,pct)}%;${col?'background:'+col:''}"></div></div><span class="n">${val}</span></div>`}
+
+/* tabs */
+const tabDefs=[["book","Book seats"],["gate","Gate scan"],["ops","Analytics"],["spon","Sponsors"],["sec","Security"],["agents","Agents"],["ai","Ticket assistant"]];
+tabDefs.forEach(([id,l],i)=>{const b=document.createElement("button");b.textContent=l;b.setAttribute("role","tab");b.dataset.t=id;b.onclick=()=>show(id);$("tabs").appendChild(b)});
+function show(id){document.querySelectorAll(".tab").forEach(s=>s.classList.toggle("on",s.id==="t-"+id));
+ document.querySelectorAll("#tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.t===id));renderAll()}
+
+/* KPIs */
+function kpis(){const s=stats();$("kSold").textContent=fmt(s.sold);$("kOcc").textContent=s.occ.toFixed(1)+"%";$("kRev").textContent=cr(s.rev);$("kIn").textContent=fmt(entered.size)}
+
+/* seat map */
+function renderRing(){$("ring").innerHTML="";blocks.forEach(b=>{const el=document.createElement("button");el.className="blk";el.setAttribute("aria-pressed",b===cur);
+ const o=b.sold/b.cap;el.innerHTML=`<b>${b.id}</b><small>${tiers[b.t].n.split(" ")[0]}</small><small>${fmt(b.cap-b.sold)} free</small><div class="heat"><i style="width:${o*100}%;background:${o>.9?"var(--bad)":o>.6?"var(--brass)":"var(--turf)"}"></i></div>`;
+ el.onclick=()=>{cur=b;picked=new Set();renderBook()};$("ring").appendChild(el)})}
+function renderSeats(){const r=seeded("seats"+cur.id);const taken=cur.sold/cap(cur);$("secTitle").textContent=`Block ${cur.id}, ${tiers[cur.t].n}, ₹${fmt(tiers[cur.t].p)} per seat`;
+ $("seats").innerHTML="";for(let i=0;i<200;i++){const isT=r()<taken&&!cur.mine.has(i);const b=document.createElement("button");b.className="seat"+(isT?" t":"")+(picked.has(i)?" s":"");
+ b.setAttribute("aria-label",`Row ${Math.floor(i/20)+1}, seat ${i%20+1}, ${cur.mine.has(i)?"taken":isT?"taken":picked.has(i)?"selected":"free"}`);
+ if(cur.mine.has(i)){b.className="seat t"}else if(!isT){b.onclick=()=>{if(picked.has(i))picked.delete(i);else if(picked.size<10)picked.add(i);renderSeats();renderCheckout()}}else b.disabled=true;
+ $("seats").appendChild(b)}}
+function cap(b){return b.cap}
+function renderCheckout(){const n=picked.size,t=tiers[cur.t];$("sel").textContent=n?`${n} seat${n>1?"s":""} in block ${cur.id}`:"No seats selected.";$("amt").textContent="₹"+fmt(n*t.p);$("payBtn").disabled=!n}
+function renderBook(){renderRing();renderSeats();renderCheckout()}
+$("payBtn").onclick=()=>{const name=$("nm").value.trim(),em=$("em").value.trim();
+ if(!name||!/^\S+@\S+\.\S+$/.test(em)){$("payMsg").textContent="Enter a name and a valid email to continue.";return}
+ const id="LST-"+Math.random().toString(36).slice(2,8).toUpperCase();const seats=[...picked].sort((a,b)=>a-b);
+ seats.forEach(i=>cur.mine.add(i));cur.sold+=seats.length;
+ const bk={id,token:sign(id),name,email:em,block:cur.id,tier:cur.t,seats:seats.map(i=>`R${Math.floor(i/20)+1}S${i%20+1}`),amount:seats.length*tiers[cur.t].p,method:$("pay").value};
+ bookings.push(bk);picked=new Set();$("payMsg").textContent="Payment accepted (test mode). Tickets issued.";
+ $("passes").insertAdjacentHTML("afterbegin",`<div class="pass"><div><b>${tiers[bk.tier].n}, block ${bk.block}</b><br>${esc(bk.name)}<br>Seats: ${bk.seats.join(", ")}<br>Booking ID: ${bk.id}<br>Gate ${tiers[bk.tier].gates[0]}${tiers[bk.tier].gates.length>1?" to "+tiers[bk.tier].gates.at(-1):""}<br><span class="muted">Token: ${bk.token}</span></div>${qr(bk.token)}</div>`);
+ renderBook();kpis();tokList()};
+
+/* gate */
+function tokList(){$("tokPick").innerHTML=bookings.length?'<option value="">Pick a ticket</option>'+bookings.map(b=>`<option value="${b.token}">${b.id} – ${esc(b.name)}</option>`).join(""):'<option value="">No tickets booked yet</option>'}
+$("tokPick").onchange=e=>{if(e.target.value)$("tok").value=e.target.value};
+function logEntry(msg,cls){const l=$("entryLog");if(l.querySelector(".muted"))l.innerHTML="";l.insertAdjacentHTML("afterbegin",`<div><span class="pill ${cls}">${cls==="good"?"valid":"refused"}</span> ${msg}</div>`)}
+$("scanBtn").onclick=()=>{const t=$("tok").value.trim();const id=t.split(".")[0];const bk=bookings.find(b=>b.id===id);
+ let m,c;if(!t){m="Enter a ticket token.";c="warn"}
+ else if(sign(id)!==t||!bk){m="Refused: token is not valid.";c="bad";logEntry("Invalid token "+esc(t.slice(0,18)),"bad")}
+ else if(entered.has(id)){m=`Refused: ${id} already scanned.`;c="bad";logEntry(`Duplicate scan for ${id}`,"bad")}
+ else{entered.add(id);const g=tiers[bk.tier].gates[bk.seats.length%tiers[bk.tier].gates.length];gateIn[g]+=bk.seats.length;m=`Valid. ${esc(bk.name)}, ${bk.seats.length} seat(s), block ${bk.block}. Direct to gate ${g}.`;c="good";logEntry(`${id} through gate ${g}`,"good");kpis()}
+ $("scanRes").innerHTML=`<span class="pill ${c}">${c==="good"?"Valid":c==="bad"?"Refused":"Note"}</span> ${m}`};
+
+/* analytics */
+function ops(){$("salesBars").innerHTML=Object.keys(tiers).map(t=>{const s=tierStats(t);return bar(tiers[t].n,s.occ,s.occ.toFixed(0)+"%")}).join("")+
+ `<table style="margin-top:12px"><tr><th>Category</th><th class="n">Sold</th><th class="n">Capacity</th><th class="n">₹ crore</th></tr>${Object.keys(tiers).map(t=>{const s=tierStats(t);return`<tr><td>${tiers[t].n}</td><td class="n">${fmt(s.sold)}</td><td class="n">${fmt(s.cap)}</td><td class="n">${cr(s.rev)}</td></tr>`}).join("")}</table>`;
+ const s=stats(),sp=sponsorSigned(),bro=broadcastSigned();
+ $("revBars").innerHTML=bar("Tickets",s.rev/20.85*100,cr(s.rev))+bar("Sponsorship",sp/35*100,cr(sp))+bar("Broadcast",bro/50*100,cr(bro));
+ $("forecast").textContent=`If every category keeps its current occupancy, the final ticket revenue is ${cr(s.rev)} crore. Selling out all 50,000 seats at plan prices gives 20.85 crore.`}
+
+/* sponsors */
+const stageP={Lead:.1,Pitched:.3,Negotiating:.6,Signed:1};
+const deals=[["Title sponsor (open)","Sponsor",12,"Negotiating"],["Associate sponsor 1","Sponsor",3,"Pitched"],["Associate sponsor 2","Sponsor",3,"Pitched"],["Associate sponsor 3","Sponsor",3,"Lead"],["Associate sponsor 4","Sponsor",3,"Lead"],["Venue and pouring rights","Sponsor",6,"Lead"],["Official partners","Sponsor",5,"Lead"],["TV broadcast rights","Broadcast",30,"Pitched"],["Streaming rights","Broadcast",20,"Lead"]].map(d=>({n:d[0],c:d[1],v:d[2],s:d[3]}));
+const sponsorSigned=()=>deals.filter(d=>d.c==="Sponsor"&&d.s==="Signed").reduce((a,d)=>a+d.v,0);
+const broadcastSigned=()=>deals.filter(d=>d.c==="Broadcast"&&d.s==="Signed").reduce((a,d)=>a+d.v,0);
+function spon(){$("sponTable").innerHTML=`<tr><th>Deal</th><th>Type</th><th class="n">Target ₹ crore</th><th>Stage</th><th class="n">Weighted</th></tr>`+deals.map((d,i)=>`<tr><td>${d.n}</td><td>${d.c}</td><td class="n">${cr(d.v)}</td><td><select aria-label="Stage for ${d.n}" data-i="${i}">${Object.keys(stageP).map(s=>`<option ${s===d.s?"selected":""}>${s}</option>`).join("")}</select></td><td class="n">${cr(d.v*stageP[d.s])}</td></tr>`).join("");
+ $("sponTable").querySelectorAll("select").forEach(s=>s.onchange=e=>{deals[+e.target.dataset.i].s=e.target.value;spon()});
+ const w=c=>deals.filter(d=>d.c===c).reduce((a,d)=>a+d.v*stageP[d.s],0);
+ $("sponSum").textContent=`Sponsorship: ${cr(w("Sponsor"))} of 35.00 crore weighted, ${cr(sponsorSigned())} signed. Broadcast: ${cr(w("Broadcast"))} of 50.00 crore weighted, ${cr(broadcastSigned())} signed.`}
+
+/* security */
+function gates(){$("gateBars").innerHTML=Object.keys(queues).map(g=>bar("Gate "+g,queues[g]/2.5,queues[g]+" in queue",queues[g]>150?"var(--bad)":queues[g]>100?"var(--brass)":"")).join("")}
+$("simBtn").onclick=()=>{Object.keys(queues).forEach(g=>queues[g]=Math.round(20+Math.random()*180));gates()};
+const zones=["Gate 1","Gate 2","Gate 3","Gate 4","Gate 5","Gate 6","Gate 7","Gate 8","General stands","Premium stands","VIP lounge","Corporate boxes","Parking","Food courts"];
+$("iz").innerHTML=zones.map(z=>`<option>${z}</option>`).join("");
+$("incBtn").onclick=()=>{const t=$("it").value.trim();if(!t){$("it").focus();return}incidents.unshift({z:$("iz").value,t,s:$("isv").value,time:new Date().toLocaleTimeString()});$("it").value="";incs()};
+function incs(){$("incLog").innerHTML=incidents.length?incidents.map(i=>`<div><span class="pill ${i.s==="high"?"bad":i.s==="medium"?"warn":"good"}">${i.s}</span> ${esc(i.z)}: ${esc(i.t)} <span class="muted">${i.time}</span></div>`).join(""):'<div class="muted">No incidents logged.</div>'}
+
+/* agents */
+const agents=[
+ {id:"Ticketing agent",run(){const r=[];Object.keys(tiers).forEach(t=>{const s=tierStats(t);if(s.occ<55)r.push(`${tiers[t].n} is ${s.occ.toFixed(0)}% sold. Offer a limited bundle or group price.`);if(s.occ>90)r.push(`${tiers[t].n} is ${s.occ.toFixed(0)}% sold. Open waiting list.`)});blocks.filter(b=>b.sold/b.cap>.9).forEach(b=>r.push(`Block ${b.id} is nearly full. Move overflow buyers to the next block.`));return r}},
+ {id:"Sponsorship agent",run(){const r=[];deals.filter(d=>d.s==="Lead"&&d.v>=5).forEach(d=>r.push(`Send a proposal for "${d.n}" (${cr(d.v)} crore, still a lead).`));deals.filter(d=>d.s==="Negotiating").forEach(d=>r.push(`Schedule a closing call for "${d.n}".`));return r}},
+ {id:"Security agent",run(){const r=[];Object.keys(queues).filter(g=>queues[g]>150).forEach(g=>r.push(`Gate ${g} queue is ${queues[g]}. Open extra lanes and move 2 stewards there.`));incidents.filter(i=>i.s==="high").forEach(i=>r.push(`High-severity incident at ${i.z}: "${i.t}". Dispatch supervisor.`));return r}},
+ {id:"Fan engagement agent",run(){const r=[];const w=Object.keys(tiers).sort((a,b)=>tierStats(a).occ-tierStats(b).occ)[0];r.push(`Run a countdown post series targeting ${tiers[w].n} buyers (lowest occupancy).`);r.push("Announce meet-and-greet slots at 2:00 PM to ticket holders by email.");return r}},
+ {id:"Broadcast agent",run(){const r=[];deals.filter(d=>d.c==="Broadcast"&&d.s!=="Signed").forEach(d=>r.push(`"${d.n}" is ${d.s}. Without it the plan loses up to ${cr(d.v)} crore.`));if(!r.length)r.push("Broadcast rights signed. Confirm camera and feed plan.");return r}},
+ {id:"Analytics agent",run(){const s=stats(),sp=sponsorSigned(),bro=broadcastSigned();const rev=s.rev+sp+bro;return[`Signed revenue now ${cr(rev)} crore against 93.89 crore planned expenses.`,rev<93.89?`Shortfall ${cr(93.89-rev)} crore. Do not commit to player fees before it closes.`:"Signed revenue covers planned expenses."]}}];
+function renderAgents(){$("agentGrid").innerHTML=agents.map((a,i)=>`<div class="card agent"><h3>${a.id}</h3><div id="ag${i}" class="muted">Not run yet.</div><button class="b alt" data-a="${i}">Run</button></div>`).join("");
+ document.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>runAgent(+b.dataset.a))}
+function runAgent(i){const r=agents[i].run();$("ag"+i).innerHTML=r.length?r.map((x,j)=>`<div class="rec"><span>${esc(x)}</span><button class="b" data-ap="${i}-${j}">Approve</button></div>`).join(""):"No actions needed.";
+ $("ag"+i).querySelectorAll("[data-ap]").forEach((b,j)=>b.onclick=()=>{const l=$("actLog");if(l.querySelector(".muted"))l.innerHTML="";l.insertAdjacentHTML("afterbegin",`<div><b>${agents[i].id}</b>: ${esc(r[j])} <span class="muted">${new Date().toLocaleTimeString()}</span></div>`);b.disabled=true;b.textContent="Approved"})}
+$("runAll").onclick=()=>agents.forEach((_,i)=>runAgent(i));
+
+/* assistant */
+function say(t,c){const d=document.createElement("div");d.className="msg "+c;d.textContent=t;$("chat").appendChild(d);$("chat").scrollTop=1e9}
+function answer(q){const s=q.toLowerCase();const id=(q.match(/LST-[A-Z0-9]{6}/i)||[])[0];
+ if(id){const b=bookings.find(x=>x.id===id.toUpperCase());return b?`Booking ${b.id}: ${tiers[b.tier].n}, block ${b.block}, seats ${b.seats.join(", ")}, ₹${fmt(b.amount)}. ${entered.has(b.id)?"Already used at the gate.":"Not yet scanned."}`:"I cannot find that booking ID."}
+ if(/vip/.test(s))return `VIP seats are ₹${fmt(tiers.vip.p)} each, ${fmt(tierStats("vip").cap-tierStats("vip").sold)} left. Entry is through gate 7.`;
+ if(/box|corporate/.test(s))return `Corporate box seats are ₹${fmt(tiers.box.p)} each, ${fmt(tierStats("box").cap-tierStats("box").sold)} left. Entry is through gate 8.`;
+ if(/premium/.test(s))return `Premium seats are ₹${fmt(tiers.pre.p)} each, ${fmt(tierStats("pre").cap-tierStats("pre").sold)} left. Gates 5 and 6.`;
+ if(/general|cheap|price|cost|ticket/.test(s))return `General ₹${fmt(tiers.gen.p)}, Premium ₹${fmt(tiers.pre.p)}, VIP ₹${fmt(tiers.vip.p)}, Corporate Box ₹${fmt(tiers.box.p)} per seat. Book up to 10 seats at a time.`;
+ if(/gate|enter|entry|qr/.test(s))return "Gates open at 10:00 AM. Show the QR on your ticket. General uses gates 1 to 4, Premium 5 and 6, VIP 7, Corporate Box 8. Bags are checked.";
+ if(/time|schedule|start|toss|when/.test(s))return "Gates 10:00 AM, practice and meet-and-greet 2:00 PM, opening ceremony 5:00 PM, anthems 6:00 PM, toss 6:30 PM, first ball 6:45 PM, presentation 10:00 PM.";
+ if(/refund|cancel|transfer/.test(s))return "Refund and transfer rules are not set yet. They must be published before ticket sales open.";
+ if(/park/.test(s))return "Parking details and shuttles are still being planned. They will be shown on the booking page before sales open.";
+ if(/seat|available|left/.test(s)){const x=stats();return `${fmt(50000-x.sold)} of 50,000 seats are still available (${x.occ.toFixed(1)}% sold).`}
+ return "I can help with prices, seat availability, gates, schedule, refunds, parking, or a booking ID like LST-ABC123."}
+function ask(){const q=$("q").value.trim();if(!q)return;say(q,"u");$("q").value="";say(answer(q),"a")}
+$("ask").onclick=ask;$("q").addEventListener("keydown",e=>{if(e.key==="Enter")ask()});
+say("Hello. Ask me about tickets, gates or the match schedule.","a");
+
+function renderAll(){kpis();renderBook();tokList();ops();spon();gates();incs();if(!$("agentGrid").children.length)renderAgents()}
+show("book");
+</script>
+</body>
+</html>
